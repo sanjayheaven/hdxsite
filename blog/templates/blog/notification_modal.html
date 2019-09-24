@@ -1,0 +1,68 @@
+<div class="modal fade" id="notification_modal" data-backdrop="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">消息通知</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {% if user.notifications.unread %}
+                    {% for un_read_item in user.notifications.unread %}
+                        <li>
+                            <h6>
+                                {{ un_read_item.timesince }}前 用户【
+                                {{ un_read_item.actor }}
+                                】在文章
+                                <form action="{% url 'comment:comment-notice' %}" method="GET">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="un_read_item_id" value="{{un_read_item.id}}">
+                                    <input type="hidden" name="un_read_item_target_id" value="{{un_read_item.target.id}}">
+                                    <input type="hidden" name="un_read_item_action_object" value="{{un_read_item.action_object}}">
+                                    <input type="hidden" name="un_read_item_action_object_id" value="{{un_read_item.action_object.id}}">
+                                    <button type="submit" class="btn" data-toggle="tooltip" data-placement="top" title="{{un_read_item.target}}"   > 
+                                        {{ un_read_item.target|truncatechars:10 }}... 
+                                    </button>
+                                    {{ un_read_item.verb }}
+                                </form>
+                            </h6>
+                            <div class="text-muted ml-4">
+                                
+                                <form class="justify" action="{% url 'comment:comment-notice' %}" method="GET">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="un_read_item_id" value="{{un_read_item.id}}">
+                                    <input type="hidden" name="un_read_item_target_id" value="{{un_read_item.target.id}}">
+                                    <input type="hidden" name="un_read_item_action_object" value="{{un_read_item.action_object}}">
+                                    <input type="hidden" name="un_read_item_action_object_id" value="{{un_read_item.action_object.id}}">
+                                    {{ un_read_item.description|safe|striptags|truncatechars:30}}...
+                                    <button type="submit" class="badge badge-pill badge-warning">
+                                    more
+                                    </button>
+                                    <!-- <a type="submit" href="" class="badge badge-info">more</a> -->
+                                </form>
+                                
+                            </div>
+                        </li>
+                        <br>
+                    {% endfor %}
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                        <a class="btn btn-primary" href="{% url 'comment:comment-notice' %}">全部标为已读</a>
+                    </div>
+                {% else %}
+                    <h3 class="text-center">暂无通知</h3>
+                    <br>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    </div>
+                {% endif %}
+
+                
+            </div>
+            
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,71 @@
+{% load static %}
+
+<ol class="breadcrumb bg-light ">
+    <li class="breadcrumb-item ">
+        <a class="btn btn-outline-success {% if order_by == '' %} active {% endif %}" href="{% url 'blog:index' %}"><i class="fas fa-file hvr-rotate" style="color:rgb(3, 37, 88)">最新</i></a>
+    </li>
+    <li class="breadcrumb-item">
+        <a class="btn btn-outline-success {% if order_by == '-total_views' %} active {% endif %} " href="?order_by=-total_views "><i class="fas fa-fire hvr-rotate" style="color: rgb(250, 7, 7);">最热</i></a>
+        
+    </li>
+</ol>
+
+
+{% for post in post_list %}
+<div class="card hvr-glow mb-2 " style="display: flex">
+    <div class="row">
+        <!-- {% if 1 %}
+        <div class="col-3 align-self-center">
+            <a href="{% url 'blog:post-detail' post.id %}">
+                <img src="{% static 'blog/images/logo.JPG' %}" class="card-img hvr-grow" alt="缩略图"
+                    style="transition-duration: 0.5s;">
+            </a>
+        </div>
+        {% endif %} -->
+        <div class="col-9 card-body">
+            <h4 class="card-title"><a class="btn btn-outline-primary hvr-forward" style="color:rgb(0, 0, 0);" href="{% url 'blog:post-detail' post.id %}">{{ post.title }}</a></h4>
+                {% if 1 %}
+                <a href="{% url 'blog:category-list' post.category.id %}" class="btn btn-sm hvr-pop btn-outline-info">
+                    {{ post.category }}
+                </a>
+                {% endif %}
+
+                {% for tag in post.tag.all %}
+                <a class="badge badge-pill hvr-float-shadow" style="color: grey;" href="#">{{ tag.name }}</a>
+                {% endfor %}
+
+                <p class="card-text ml-4 my-2 text-secondary">{{ post.content|safe|striptags|truncatechars:70 }}
+                    <a class="ml-2 btn btn-sm hvr-grow text-primary" href="{% url 'blog:post-detail' post.id%}">...more</a>
+                </p>
+
+                <span class="mb-0 ml-4">
+                    <a href="{% url 'blog:owner-list' post.owner.id %}" class="mr-1"><i class="fas fa-user" style="color: rgb(140, 100, 19);">{{ post.owner }}</i>
+                    </a>
+                    <i class="fas fa-eye mr-1" style="color: rgb(56, 70, 131);">{{ post.total_views }}</i>
+                    <!-- <i class="fas fa-heart mr-1" style="color: rgb(255, 0, 0);">{{ 100 }}</i> -->
+                    <i class="fas fa-comments mr-1" style="color: yellowgreen;">{{ post.comments.count }}</i>
+                    <i class="fas fa-clock mr-1" style="color: pink;">{{ post.created_time}}</i>
+                </span>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<div class="text-center my-4 text-info">
+    {% if page_obj %}
+    {% if page_obj.has_previous %}
+    <span>
+        <a class="btn btn-sm btn-outline-secondary" href="?page={{ page_obj.previous_page_number }}&order_by={{ order_by }}">上一页</a>
+    </span>
+
+    {% endif %}
+    {{ page_obj.number }} / {{ paginator.num_pages }}
+    {% if page_obj.has_next %}
+    <span>
+
+        <a class="btn btn-sm btn-outline-secondary" href="?page={{ page_obj.next_page_number }}&order_by={{ order_by }}">下一页</a>
+    </span>
+
+    {% endif %}
+    {% endif %}
+</div>

@@ -1,0 +1,73 @@
+{% load notifications_tags %}
+{% notifications_unread as unread_count %}
+
+{% include 'blog/notification_modal.html'%}
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
+    <div class="container">
+        <a href="{% url 'blog:index' %}" class="navbar-brand hvr-underline-from-center">Home</a>
+        <div class="">
+            <ui class="navbar-nav nav ">
+                <li class="nav-item mr-2"><a href="{% url 'blog:index' %}" class="nav-link">首页</a></li>
+                <li class="nav-item mr-2"><a href="#" class="nav-link">关于我</a></li>
+                
+                <!-- <li class="nav-item mr-2"><a href="{% url 'django.contrib.sitemaps.views.sitemap' %}" class="nav-link">sitemap</a></li> -->
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle hvr-pop " data-toggle="dropdown" >小工具</a>
+                    <ul class="dropdown-menu ">
+                        <!-- <a href="#" target="_blank" class="dropdown-item hvr-forward " data-toggle="tooltip" data-placement="right" title="未完成"><i class="fas fa-code" style="color: rgb(9, 31, 228);">python在线编辑器</i></a> -->
+                        <a href="{% url 'RSS' %}" class="dropdown-item hvr-forward "><i class="fas fa-book" style="color: rgb(228, 115, 9);">RSS订阅</i></a>
+                        <a href="#" class="dropdown-item hvr-forward "><i class="fas fa-cloud" style="color: rgb(193, 184, 243);">待定</i></a>
+                    </ul>
+                </li>
+            </ui>
+        </div>
+        <div >
+            <form class="form-inline" action="{% url 'blog:search' %}" method="GET">
+                <input type="search" class="form-control mr-3" name="search_keyword" placeholder="搜索文章"
+                    value="{{ search_keyword }}">
+                <button class="btn btn-primary" type="submit">搜索</button>
+            </form>
+        </div>
+        <div class="">
+            <ui class="navbar-nav nav " >
+                {% if user.is_authenticated %}
+                    <li class="dropdown nav-item mr-2">
+                        <!-- <img style="max-height:40px;" src="{{ user.socialaccount_set.all.0.get_avatar_url }}"> -->
+                        
+                        <a class="nav-link dropdown-toggle hvr-pop" data-toggle="dropdown" href="#">
+                            {{ user.username }}
+                            
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            {% if user.socialaccount_set.all.0 %}
+                            <a href="#" class="dropdown-item hvr-forward" data-toggle="tooltip" data-placement="left" title="跳转到GitHub主页"><i class="fas fa-user" style="color: rgb(140, 100, 19);">个人中心</i></a>
+                            {% endif %}
+                            <!-- <a href="#" class="dropdown-item hvr-forward" data-toggle="tooltip" data-placement="left" title="跳转到GitHub主页"><i class="fas fa-user" style="color: rgb(140, 100, 19);">个人中心</i></a> -->
+                            <a href="#" class="dropdown-item hvr-forward" data-toggle="modal" data-target="#notification_modal">
+                                <i class="fa fa-envelope" style="color: rgb(49, 56, 50);">消息通知
+                                {% if unread_count %}
+                                <span class="badge badge-pill badge-danger">{{ unread_count }}</span>
+                                {% endif %}
+                                </i>
+                                
+                            </a>
+                            {% if user.is_superuser %}
+                            <a href="{% url 'admin:index' %}" class="dropdown-item hvr-forward"><i class="fas fa-sign-out-alt" style="color: rgb(86, 7, 231);">后台管理</i></a>
+                            {% endif %}
+                            <a href="{% url 'blog:auth_logout' %}" class="dropdown-item hvr-forward"><i class="fas fa-sign-out-alt" style="color: rgb(230, 74, 27);">退出登录</i></a>
+                            <!-- <a href="#" class="dropdown-item hvr-forward" ><i class="fas fa-sign-out-alt" style="color: rgb(140, 100, 19);">暂定</i></a> -->
+                        </ul>
+                    </li>
+                    {% if user.is_superuser %}
+                    <li class="nav-item"><a href="{% url 'blog:post-add' 0 %}" class="nav-link btn btn-danger hvr-wobble-bottom"><i class="fas fa-pencil-alt "></i>写文章</a></li>
+                    {% endif %}
+                {% else %}
+                    <li class="nav-item"><a href="{% url 'blog:login' %}" class="nav-link">登录</a></li>
+                    <li class="nav-item"><a href="{% url 'blog:signup' %}" class="nav-link">注册</a></li>
+                {% endif %}
+            </ui>
+        </div>
+
+    </div>
+</nav>

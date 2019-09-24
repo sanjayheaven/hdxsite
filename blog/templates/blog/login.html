@@ -1,0 +1,45 @@
+
+{% extends 'blog/base.html' %}
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block container %}
+<div class="container col-lg-5 col-md-4 col-sm-3 col-2 my-3">
+  <div class="card">
+    <div class="card-body bg-light">
+      <h2 class="text-center">
+        登录
+        <small>没有账号？<a class="btn btn-sm btn-outline-info" href="{% url 'blog:signup' %}">立即注册</a></small>
+      </h2>
+      <hr>
+      <form action="" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ forms.as_p }}
+        </div>
+        <div class="form-group ">
+          <a href="#">忘记密码？</a>
+          <button class="btn btn-primary float-right" type="submit">登陆</button>
+        </div>
+        <div class="form-group text-secondary">
+          <strong>{{ error }}</strong>
+        </div>
+      </form>
+
+        <h5 class="text-muted text-center">快速登录</h5>
+        <hr>
+        <div class="text-center">
+            <a href="/accounts/github/login/?process=login"><i class="fab fa-github"
+                    style="font-size: 3em; color: rgb(114, 113, 113);"></i></a>
+        </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+
+
+
+
+

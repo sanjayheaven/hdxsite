@@ -1,0 +1,198 @@
+{% extends 'blog/base.html'%}
+{% load static comment_tags %}
+
+{% block container %}
+
+
+<div class="container my-4">
+    <div class="row">
+        {% include 'blog/reply_modal.html' %}
+        <div class="col-md-2 mt-4 sidebar" id="sidebar">
+            <div class="card hvr-glow mb-2  sidebar__inner" style="display: flex">
+
+                <div class="card-body ">
+                    <div class="card-title ">
+                        <h5 class="text-center mt-2"><strong>快捷导航</strong></h5>
+                        <hr>
+                        待定，想一些快捷导航，不弄成目录
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-10 col-lg-10">
+            <nav>
+                <ol class="breadcrumb bg-light">
+                    <li class="breadcrumb-item text-monospace">
+                        <a class="hvr-wobble-bottom" href="{% url 'blog:index' %}"><i class="fas fa-home"
+                                style="color:rgb(185, 66, 66)">首页</i></a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a class="hvr-wobble-bottom" href="{% url 'blog:category-list' post.category.id %}"><i
+                                class="fas fa-columns" style="color: rgb(104, 32, 187);">{{ post.category }}</i></a>
+                    </li>
+                    <li class="breadcrumb-item active">{{ post.title }}</li>
+                </ol>
+            </nav>
+
+            <div class="card hvr-glow mb-2 text-center" style="display: flex">
+                <div class="card-body">
+                    <h1 class="card-title">{{ post.title }}</h1>
+                    <div class="card-text text-center text-muted">
+                        <span class="text-monospace">
+                            100 阅读· 100 评论· {{ post.created_time|date:"Y/m/d" }}发布
+                            <a href="#comment_area" style="color: cornflowerblue;"
+                                class="hvr-grow no-underline">前往评论</a>
+                            {% if user == post.owner %}
+                            <a href="{% url 'blog:post-add' post.id %}" style="color: #00aaaa"
+                                class="hvr-grow no-underline">编辑</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card hvr-glow mb-2 " style="display: flex">
+                <div class="card-body">
+                    <div class="card-title">
+                        <ul class="">
+                            {{ post.content|safe }}
+                        </ul>
+                    </div>
+                    <div>
+                        <br>
+                        <br>
+                        {% if pre_post %}
+                        <a class="btn btn-primary float-left hvr-sweep-to-left" data-toggle="tooltip" data-placement="top" title="{{pre_post.title}}"
+                            href="{%url 'blog:post-detail' pre_post.id %}"> <<上一章 </a> 
+                        {% endif %} {% if next_post %} 
+                        <a class="btn btn-primary float-right hvr-sweep-to-right" data-toggle="tooltip" data-placement="top" title="{{next_post.title}}"
+                            href="{%url 'blog:post-detail' next_post.id%}">下一章>>
+                        </a>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="card hvr-glow mb-2" style="display: flex">
+                <div class="card-body">
+                    <div>
+
+                        {% if user.is_authenticated %}
+                        <form action="{% url 'comment:post-comment' post.id%}" class="" method="POST">
+                            {% csrf_token %}
+                            <br>
+                            <h5>我要发言:</h5>
+                            <div class="form-group">
+                                {{ comment_forms.media }}
+                                {{ comment_forms.content }}
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary hvr-icon-bob">
+                                    <i class="fas fa-plane hvr-icon"></i>
+                                    提交评论
+                                </button>
+                            </div>
+                        </form>
+                        {% else %}
+                        <h5 class="text-monospace text-center">
+                            请<a class="btn btn-outline-primary" href="{% url 'blog:login' %}">登录</a>后回复
+                        </h5>
+                        {% endif %}
+                    </div>
+
+                    <div class="card-text">
+                        <div>
+                            <br>
+                            <h5 id="comment_area" class="text-center alert alert-info">共有{{ post.comments.count }}条评论
+                            </h5>
+                        </div>
+
+                        <div>
+                            {% for comment in  post.comments.all %}
+                            <li id="comment_{{comment.id}}" class="pt-2">
+                                <div class="ml-2">
+                                    <h6 class="">
+                                        {{ comment.owner }} {{ forloop.counter }} 楼 -
+                                        {{ comment.created_time }}
+                                        <small>
+                                            <a href="javascript:reply({{comment.id}},'');"><i class="fa fa-reply">回复</i></a>
+                                        </small>
+                                        
+                                    </h6>
+                                    <div class="text-muted ml-4">
+                                        {{ comment.content|safe }}
+
+                                    </div>
+                                        <!-- {% if comment.replies.all %}
+                                        <a class="btn btn-secondary" data-toggle="collapse" href="#collapseExample_{{comment.id}}" aria-expanded="false" aria-controls="collapseExample"> 更多评论 </a>
+                                        {% endif%} -->
+                                        <ul class="text-muted" id="collapseExample_{{comment.id}}">
+                                            {% for reply in comment.replies.all %}
+                                                {% if reply.reply_comment == comment %}
+                                                <li id="reply_{{reply.id}}"> 
+                                                    {% if reply.reply %}
+                                                    <div>
+                                                        <!-- {{ reply.id }} >>> {{ reply.reply.id }} -->
+                                                        <a href="#">{{ reply.owner }}</a> 回复给 <a href="#">{{ reply.reply.owner }}</a> - {{ reply.created_time }}
+                                                        <small>
+                                                            <a href="javascript:reply({{reply.reply_comment.id}},{{reply.id}})"><i class="fa fa-reply">回复</i></a>
+                                                        </small>
+                                                    </div>
+                                                    
+                                                    {% else %}
+                                                    <div>
+                                                        <!-- {{ reply.id }} >>> {{ reply.reply_comment.id }} -->
+                                                        <a href="#">{{ reply.owner }}</a> 回复给 <a href="#">{{ reply.reply_comment.owner }}</a> - {{ reply.created_time }}
+                                                        <small>
+                                                            <a href="javascript:reply({{reply.reply_comment.id}},{{reply.id}})"><i class="fa fa-reply">回复</i></a>
+                                                        </small>
+                                                    </div>
+                                                    {% endif %}
+                                                        {{ reply.reply_content|safe }}
+                                                </li>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </ul>
+                                </div>
+                                <hr>
+                            </li>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+<style>
+    .sidebar {
+        will-change: min-height;
+    }
+
+    .sidebar__inner {
+        transform: translate(0, 0);
+        transform: translate3d(0, 0, 0);
+        will-change: position, transform;
+    }
+</style>
+{% endblock %}
+
+
+{% block deal_with_ckeditor_in_detail %}
+
+<script src="{% static 'sticky_sidebar/jquery.sticky-sidebar.js' %}"></script>
+<script type="text/javascript">
+    $('#sidebar').stickySidebar({
+        topSpacing: 20,
+        bottomSpacing: 20,
+    });
+</script>
+
+{% endblock  %}

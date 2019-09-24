@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>hdx's blog</title>
+    {% load static %}
+    
+    <link rel="stylesheet" href="{% static 'blog/css/index.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'hover.css' %}">
+    <link rel="stylesheet" href="{% static 'md/monokai.css' %}">
+    <link href="https://cdn.bootcss.com/font-awesome/5.10.2/css/all.min.css" rel="stylesheet">
+    
+    
+</head>
+<body>
+    {% include 'blog/header.html' %}
+    {% block container %}
+    {% endblock %}
+    {% include 'blog/footer.html' %}
+
+    <a class="btn btn-outline-danger" href="#" style="position:fixed;right:5px;bottom:3px">Top</a>
+</body>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    
+    <script>
+        $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            })
+    </script>
+
+    <!-- <link rel="stylesheet" href="{% static 'ckeditor/.css' %}">
+    <script src="{% static 'js/ckeditor/highlight.pack.js' %}"></script>
+    <script src="/stati/highlight.pack.js"></script> -->
+    <!-- <link href="https://cdn.bootcss.com/highlight.js/9.13.1/styles/github.min.css" rel="stylesheet"> -->
+    <link href="https://cdn.bootcss.com/highlight.js/9.15.10/styles/vs2015.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad();
+    </script>
+
+    
+    {% block deal_with_ckeditor_in_detail %}
+    {% endblock %}
+
+</html>

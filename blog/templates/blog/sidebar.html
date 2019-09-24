@@ -1,0 +1,58 @@
+{% load static %}
+{% load blog_tags %}
+<div class="mb-2 text-center">
+    
+    <a href="{% url 'blog:index' %}" ><img class="hvr-grow-shadow" style="transition-duration: 1.5s;" src="{% static 'blog/images/logo.JPG' %}" alt="logo"></a>
+</div>
+<div class="card hvr-glow my-4 mb-4" style="display: flex">
+    <div class="card-body">
+        <div class="card-tile text-muted mb-2 ">
+            <i class="fas fa-columns" style="color: rgb(104, 32, 187);"></i> 分类
+        </div>
+        <ul class="list-group ">
+            {% get_category_all as categories %}
+            {% for category in categories %}
+                <a class="list-group-item hvr-pop mb-1 btn btn-sm btn-outline-success {% if category.id == category_id %} active {% endif %}" href="{% url 'blog:category-list' category.id %}"
+                    title="查看 {{ category.name }} 所有文章" >{{ category.name }}  </a>
+            {% endfor %}
+        </ul>
+
+    </div>
+</div>
+
+<div class="card hvr-glow my-4 mb-4" style="display: flex">
+    <div class="card-body">
+        <div class="card-tile text-muted mb-2">
+            <i class="fas fa-tag" style="color: rgb(240, 183, 109);"></i> 标签
+        </div>
+        <div>
+            {% get_tags_all as tags %}
+            {% for tag in tags %}
+                <a href="{% url 'blog:tag-list' tag.id%}" class="
+                btn btn-sm  hvr-grow-shadow mb-1
+
+                {{ random_tag_colors|random }}
+
+                ">{{ tag }}</a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="card hvr-glow my-4 mb-4" style="display: flex">
+    <div class="card-body">
+        <div class="card-tile text-muted mb-2">
+            <i class="fas fa-link" style="color: rgb(107, 233, 117);"></i> 友情链接
+        </div>
+        <ul class="card-text ">
+            <li class="mb-1"> 
+                <a href="https://www.dusaiphoto.com/" target="_blank" class="btn btn-sm btn-info " style="color:black">dusaiphoto</a>
+            </li>
+            <li class="mb-1"> 
+                <a href="https://codingcat.top/" target="_blank" class="btn btn-sm btn-warning " style="color:black">codingcat</a>
+            </li>
+           
+        </ul>
+
+    </div>
+</div>
