@@ -41,7 +41,7 @@ defusedxml==0.6.0
 demjson==2.2.4
 diff-match-patch==20181111
 distributed==1.19.1
-Django==2.2.3
+Django==2.2.4
 django-allauth==0.40.0
 django-ckeditor==5.7.1
 django-crispy-forms==1.7.2
