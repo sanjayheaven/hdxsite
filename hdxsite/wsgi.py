@@ -11,6 +11,8 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'hdxsite.settings')
+# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'hdxsite.settings')
+profile = os.environ.get('HDX_DISITE_PROFILE','product')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'hdxsite.setting.{}'.format(profile))
 
 application = get_wsgi_application()
