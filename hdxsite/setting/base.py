@@ -182,7 +182,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'ng_static')###便于nginx收集静态资源
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')###便于nginx收集静态资源
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
