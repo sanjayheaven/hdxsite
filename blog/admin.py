@@ -60,7 +60,7 @@ class PostAdmin(admin.ModelAdmin):
         ('category','title'),
         ('owner','status'),
         'abstract',
-        'post_content',
+        'content',
         'tag',
     )
     # filter_vertical = ('tag', )

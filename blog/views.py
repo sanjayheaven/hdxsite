@@ -29,12 +29,12 @@ class AddPostModelFormView(View):
     '''
     def get(self,request,addpost_id):
         if not addpost_id:
-            post_forms = AddPostModelForm()
-            return render(request,'blog/add_post.html',context={'post_forms':post_forms})
+            forms = AddPostModelForm()
+            return render(request,'blog/add_post.html',context={'post_forms':forms})
         else:
             post = get_object_or_404(Post,id=addpost_id)
             forms = AddPostModelForm(instance=post)
-            return render(request,'blog/add_post.html',context={'post_forms':post_forms,'delete_update':True})
+            return render(request,'blog/add_post.html',context={'post_forms':forms,'delete_update':True})
 
     def post(self,request,addpost_id):
         if not addpost_id:###这是发表文章入口的判断,区别了发表和(更新,删除),怎么区别更新和删除？？？用button的name和value传值
@@ -44,11 +44,20 @@ class AddPostModelFormView(View):
             forms = AddPostModelForm(request.POST,instance=post)
         if forms.is_valid():
             post = forms.save(commit=False)
-            post.owner = self.request.user
+            post.owner = request.user
             if request.POST.get('delete_post',''):
                 post.status = Post.STATUS_DELETE
             forms.save()
-            return HttpResponseRedirect(reverse('blog:index'))
+            if request.POST.get('update_post'):
+                return HttpResponseRedirect(reverse('blog:post-detail',kwargs={'post_id':addpost_id}))
+            else:
+                return HttpResponseRedirect(reverse('blog:index'))
+
+        else:
+            return render(request,'blog/add_post.html',context={'post_forms':forms})
+
+
+
 
 class SignupFormView(View):
     '''
@@ -126,12 +135,14 @@ class IndexView(ListView):
     # login_url = 'login/'## 登录验证是跳转地址
     # redirect_field_name = ''###等同于next 将next这个键的值送入login_url中去
 
-
-
     extra_context = {
         'forms':SignupForm(),
         'random_tag_colors':['btn-primary','btn-secondary','btn-success','btn-info','btn-warning','btn-danger','btn-light','btn-dark']
     }
+
+    def get_queryset(self):###只展示正常的文章
+        queryset = super().get_queryset()
+        return queryset.filter(status=Post.STATUS_NORMAL)
 
     def get_ordering(self):
         order_by = self.request.GET.get('order_by', '')

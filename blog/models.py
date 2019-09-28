@@ -61,7 +61,7 @@ class Post(models.Model):
     content = RichTextField(verbose_name="文章正文")
     category = models.ForeignKey(Category, verbose_name="分类",on_delete=models.CASCADE)
     tag = models.ManyToManyField(Tag, verbose_name="标签")
-    owner = models.ForeignKey(User, verbose_name="作者",on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, verbose_name="作者",blank=True,on_delete=models.CASCADE)
     created_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
     update_time = models.DateTimeField(auto_now=True, verbose_name="更新时间")
     total_views = models.PositiveIntegerField(default=0,verbose_name="总访问量")

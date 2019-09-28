@@ -53,7 +53,7 @@
                                 
                             </a>
                             {% if user.is_superuser %}
-                            <a href="{% url 'admin:index' %}" class="dropdown-item hvr-forward"><i class="fas fa-sign-out-alt" style="color: rgb(86, 7, 231);">后台管理</i></a>
+                            <a href="{% url 'admin:index' %}" target="_blank" class="dropdown-item hvr-forward"><i class="fas fa-sign-out-alt" style="color: rgb(86, 7, 231);">后台管理</i></a>
                             {% endif %}
                             <a href="{% url 'blog:auth_logout' %}" class="dropdown-item hvr-forward"><i class="fas fa-sign-out-alt" style="color: rgb(230, 74, 27);">退出登录</i></a>
                             <!-- <a href="#" class="dropdown-item hvr-forward" ><i class="fas fa-sign-out-alt" style="color: rgb(140, 100, 19);">暂定</i></a> -->

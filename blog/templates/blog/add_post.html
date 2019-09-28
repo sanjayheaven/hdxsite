@@ -17,6 +17,9 @@
                         {{ post_forms.tag.label_tag }}
                         {{ post_forms.tag }}
                     </div>
+                    <div>
+                        {{post_forms.errors}}
+                    </div>
                 </div>
             </div>
         </div>
@@ -39,7 +42,7 @@
                     </div>
                     <div class="form-group">
                         {% if delete_update %}
-                        <button class="btn btn-primary hvr-icon-bob" type="submit">
+                        <button name="update_post" value="True" class="btn btn-primary hvr-icon-bob" type="submit">
                             <i class="fas fa-newspaper hvr-icon"></i>
                             更新文章
                         </button>

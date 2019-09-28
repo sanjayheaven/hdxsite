@@ -28,8 +28,7 @@ class NotificationView(View):
         un_read_item_action_object_id = request.GET.get('un_read_item_action_object_id')
         if not un_read_item_id or not un_read_item_target_id or not un_read_item_action_object or not un_read_item_action_object_id:
             request.user.notifications.mark_all_as_read()
-            # return HttpResponse('ok')
-            print(request.META.get('HTTP_REFERER'))
+            # print(request.META.get('HTTP_REFERER'))
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         else:
             request.user.notifications.get(id=int(un_read_item_id)).mark_as_read()

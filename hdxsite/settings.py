@@ -25,7 +25,7 @@ SECRET_KEY = os.environ.get('Django_SECRETKEY')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost ', '47.100.79.33']
 
 
@@ -195,3 +195,34 @@ AUTHENTICATION_BACKENDS = (
     # 配置 allauth 独有的认证方法，如 email 登录
     'allauth.account.auth_backends.AuthenticationBackend',
 )
+
+
+
+# server  { 
+#     listen 80; 
+#     server_name 47.100.79.33 0.0.0.0; 
+    
+#     location = /favicon.ico { access_log off; log_not_found off; }
+    
+#     location /static/ { root /home/hdx/sites/471007933.com/hdxsite; } 
+    
+#     location / { 
+#         proxy_set_header Host $http_host;
+#         proxy_set_header X-Real-IP $remote_addr; 
+#         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+#         proxy_set_header X-Forwarded-Proto $scheme; 
+#         proxy_pass http://unix:/home/hdx/sites/471007933.com/hdxsite/hdxsite.sock; } 
+#     }
+
+# [Unit] 
+# Description=gunicorn daemon 
+# After=network.target 
+
+# [Service] 
+# User=root 
+# Group=nginx 
+# WorkingDirectory=/home/hdx/sites/471007933.com/hdxsite 
+# ExecStart=/home/hdx/sites/471007933.com/hdxsite_env/bin/gunicorn --workers 3 --bind unix:/home/hdx/sites/471007933.com/hdxsite/hdxsite.sock hdxsite.wsgi:application 
+
+
+# [Install] WantedBy=multi-user.target
