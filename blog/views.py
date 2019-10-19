@@ -14,13 +14,6 @@ import markdown
 from django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here.
 
-# def IndexView(request):
-#     # return HttpResponse('<h1>{}<h1>'.format('hello world'))
-#     template_name = 'blog/index.html'
-#     context = {
-#         'name':'hdx',
-#     }
-#     return render(request,template_name = template_name,context=context)
 
 class AddPostModelFormView(View):
     '''
@@ -52,9 +45,8 @@ class AddPostModelFormView(View):
                 return HttpResponseRedirect(reverse('blog:post-detail',kwargs={'post_id':addpost_id}))
             else:
                 return HttpResponseRedirect(reverse('blog:index'))
-
-        else:
-            return render(request,'blog/add_post.html',context={'post_forms':forms})
+        # else:
+        #     return render(request,'blog/add_post.html',context={'post_forms':forms})
 
 
 
@@ -174,8 +166,8 @@ class PostView(DetailView):
     def get_context_data(self,**kwargs):###关键字参数非常重要
         '''
         '''
-        pre_posts = Post.objects.filter(id__lt=int(self.kwargs.get(self.pk_url_kwarg))).order_by('-id')
-        next_posts = Post.objects.filter(id__gt=int(self.kwargs.get(self.pk_url_kwarg))).order_by('id')
+        pre_posts = Post.objects.filter(status=Post.STATUS_NORMAL).filter(id__lt=int(self.kwargs.get(self.pk_url_kwarg))).order_by('-id')
+        next_posts = Post.objects.filter(status=Post.STATUS_NORMAL).filter(id__gt=int(self.kwargs.get(self.pk_url_kwarg))).order_by('id')
         pre_post = pre_posts[0] if pre_posts else None
         next_post = next_posts[0] if next_posts else None
         context = super().get_context_data(**kwargs)

@@ -5,6 +5,7 @@ from django.shortcuts import render,get_object_or_404,redirect
 from django.http import HttpResponseRedirect,HttpResponse,JsonResponse
 from django.views.generic import View,DetailView,ListView,DeleteView,UpdateView,CreateView
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.urls import reverse
 from .forms import CommentForm,CommentReplyForm
 
@@ -37,8 +38,6 @@ class NotificationView(View):
             return HttpResponseRedirect(redirect_url)
 
 
-
-
 class CommentFormView(View):
 
     def post(self,request,post_id):
@@ -49,7 +48,15 @@ class CommentFormView(View):
             comment.owner = request.user
             comment.post = post
             comment.save()
-            # if not post.user.is_superuser:
+            if not post.owner.is_superuser:#接收者不是超级用户，同时发送通知给管理用户
+                notify.send(
+                    request.user,
+                    recipient=get_object_or_404(User,id=1),
+                    verb='评论'+' 用户【{}】'.format(post.owner),
+                    target=post,
+                    description=comment.content,
+                    action_object=comment
+                )
             notify.send(
                 request.user,
                 recipient=post.owner,
@@ -65,17 +72,12 @@ class CommentFormView(View):
 class CommentReplyFormView(View):
 
     def post(self,request,post_id):
-        # print('(############)')
-        # print(self.kwargs)
-        # print('(############)')
-        # print(request.GET)
         reply_comment_id = request.POST.get('reply_comment_id')
         reply_id = request.POST.get('reply_id')
 
         comment = get_object_or_404(Comment, id=int(reply_comment_id))
         if reply_id :
             reply = get_object_or_404(CommentReply, id=int(reply_id))
-
         reply_forms = CommentReplyForm(request.POST)
 
         if reply_forms.is_valid():
@@ -85,7 +87,16 @@ class CommentReplyFormView(View):
             if reply_id :
                 reply_tmp.reply = reply
             reply_tmp.save()
-            notify.send(
+            if not comment.post.owner.is_superuser:###接收者不是超级用户，需要通知超级用户
+                notify.send(
+                    request.user,
+                    recipient=get_object_or_404(User,id=1),
+                    verb='回复'+' 用户【{}】'.format(comment.post.owner),
+                    target=comment.post,
+                    description=reply_tmp.reply_content,
+                    action_object=reply_tmp,
+                )
+            notify.send(##接收者是不管是不是超级用户,都这样通知
                 request.user,
                 recipient=comment.post.owner,
                 verb='回复了你',
@@ -93,5 +104,6 @@ class CommentReplyFormView(View):
                 description=reply_tmp.reply_content,
                 action_object=reply_tmp,
             )
+
             redirect_url = reverse('blog:post-detail',kwargs={'post_id':post_id}) + '#comment_area'
             return HttpResponseRedirect(redirect_url)

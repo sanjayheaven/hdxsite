@@ -36,9 +36,14 @@
                         <!-- <img style="max-height:40px;" src="{{ user.socialaccount_set.all.0.get_avatar_url }}"> -->
                         
                         <a class="nav-link dropdown-toggle hvr-pop" data-toggle="dropdown" href="#">
+                            {% if unread_count %}
+                            <span class="badge badge-pill badge-danger">
+                                {{ unread_count }}
+                            </span>
+                            {% endif %}
                             {{ user.username }}
-                            
                         </a>
+                    
                         <ul class="dropdown-menu dropdown-menu-right">
                             {% if user.socialaccount_set.all.0 %}
                             <a href="#" class="dropdown-item hvr-forward" data-toggle="tooltip" data-placement="left" title="跳转到GitHub主页"><i class="fas fa-user" style="color: rgb(140, 100, 19);">个人中心</i></a>

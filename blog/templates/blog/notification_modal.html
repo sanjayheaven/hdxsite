@@ -11,41 +11,78 @@
             <div class="modal-body">
                 {% if user.notifications.unread %}
                     {% for un_read_item in user.notifications.unread %}
-                        <li>
-                            <h6>
-                                {{ un_read_item.timesince }}前 用户【
-                                {{ un_read_item.actor }}
-                                】在文章
-                                <form action="{% url 'comment:comment-notice' %}" method="GET">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="un_read_item_id" value="{{un_read_item.id}}">
-                                    <input type="hidden" name="un_read_item_target_id" value="{{un_read_item.target.id}}">
-                                    <input type="hidden" name="un_read_item_action_object" value="{{un_read_item.action_object}}">
-                                    <input type="hidden" name="un_read_item_action_object_id" value="{{un_read_item.action_object.id}}">
-                                    <button type="submit" class="btn" data-toggle="tooltip" data-placement="top" title="{{un_read_item.target}}"   > 
-                                        {{ un_read_item.target|truncatechars:10 }}... 
-                                    </button>
-                                    {{ un_read_item.verb }}
-                                </form>
-                            </h6>
-                            <div class="text-muted ml-4">
-                                
-                                <form class="justify" action="{% url 'comment:comment-notice' %}" method="GET">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="un_read_item_id" value="{{un_read_item.id}}">
-                                    <input type="hidden" name="un_read_item_target_id" value="{{un_read_item.target.id}}">
-                                    <input type="hidden" name="un_read_item_action_object" value="{{un_read_item.action_object}}">
-                                    <input type="hidden" name="un_read_item_action_object_id" value="{{un_read_item.action_object.id}}">
-                                    {{ un_read_item.description|safe|striptags|truncatechars:30}}...
-                                    <button type="submit" class="badge badge-pill badge-warning">
-                                    more
-                                    </button>
-                                    <!-- <a type="submit" href="" class="badge badge-info">more</a> -->
-                                </form>
-                                
-                            </div>
-                        </li>
-                        <br>
+                        {% if user.is_superuser %}  
+                            <li>
+                                <h6>
+                                    {{ un_read_item.timesince }}前 用户【 {{ un_read_item.actor }} 】在文章
+                                    <form action="{% url 'comment:comment-notice' %}" method="GET">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="un_read_item_id" value="{{un_read_item.id}}">
+                                        <input type="hidden" name="un_read_item_target_id" value="{{un_read_item.target.id}}">
+                                        <input type="hidden" name="un_read_item_action_object" value="{{un_read_item.action_object}}">
+                                        <input type="hidden" name="un_read_item_action_object_id" value="{{un_read_item.action_object.id}}">
+                                        <button type="submit" class="btn" data-toggle="tooltip" data-placement="top"
+                                            title="{{un_read_item.target}}">
+                                            {{ un_read_item.target|truncatechars:10 }}...
+                                        </button>
+                                        {{ un_read_item.verb }} 
+                                        {% if un_read_item.recipient.is_superuser %}
+                                            
+                                        {% endif %}
+                                        <!-- 用户【 {{ un_read_item.recipient }} 】 -->
+                                    </form>
+                                </h6>
+                                <div class="text-muted ml-4">
+                                    <form class="justify" action="{% url 'comment:comment-notice' %}" method="GET">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="un_read_item_id" value="{{un_read_item.id}}">
+                                        <input type="hidden" name="un_read_item_target_id" value="{{un_read_item.target.id}}">
+                                        <input type="hidden" name="un_read_item_action_object" value="{{un_read_item.action_object}}">
+                                        <input type="hidden" name="un_read_item_action_object_id" value="{{un_read_item.action_object.id}}">
+                                        {{ un_read_item.description|safe|striptags|truncatechars:30}}...
+                                        <button type="submit" class="badge badge-pill badge-warning">
+                                            more
+                                        </button>
+                                        <!-- <a type="submit" href="" class="badge badge-info">more</a> -->
+                                    </form>
+                            
+                                </div>
+                            </li>
+                            <br>
+                        {% else %}
+                            <li>
+                                <h6>
+                                    {{ un_read_item.timesince }}前 用户【 {{ un_read_item.actor }} 】在文章
+                                    <form action="{% url 'comment:comment-notice' %}" method="GET">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="un_read_item_id" value="{{un_read_item.id}}">
+                                        <input type="hidden" name="un_read_item_target_id" value="{{un_read_item.target.id}}">
+                                        <input type="hidden" name="un_read_item_action_object" value="{{un_read_item.action_object}}">
+                                        <input type="hidden" name="un_read_item_action_object_id" value="{{un_read_item.action_object.id}}">
+                                        <button type="submit" class="btn" data-toggle="tooltip" data-placement="top" title="{{un_read_item.target}}"   > 
+                                            {{ un_read_item.target|truncatechars:10 }}... 
+                                        </button>
+                                        {{ un_read_item.verb }}
+                                    </form>
+                                </h6>
+                                <div class="text-muted ml-4">
+                                    <form class="justify" action="{% url 'comment:comment-notice' %}" method="GET">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="un_read_item_id" value="{{un_read_item.id}}">
+                                        <input type="hidden" name="un_read_item_target_id" value="{{un_read_item.target.id}}">
+                                        <input type="hidden" name="un_read_item_action_object" value="{{un_read_item.action_object}}">
+                                        <input type="hidden" name="un_read_item_action_object_id" value="{{un_read_item.action_object.id}}">
+                                        {{ un_read_item.description|safe|striptags|truncatechars:30}}...
+                                        <button type="submit" class="badge badge-pill badge-warning">
+                                        more
+                                        </button>
+                                        <!-- <a type="submit" href="" class="badge badge-info">more</a> -->
+                                    </form>
+                                    
+                                </div>
+                            </li>
+                            <br>
+                        {% endif %}
                     {% endfor %}
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>

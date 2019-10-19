@@ -76,16 +76,24 @@ SIMDITOR_UPLOAD_PATH = 'uploads/'
 SIMDITOR_IMAGE_BACKEND = 'pillow'
 
 SIMDITOR_TOOLBAR = [
-    'title', 'bold', 'italic', 'underline', 'fontScale',
-    'color', 'ol', 'ul', 'blockquote', 'code', 'table', 'link', 'hr', 'indent', 'outdent', 'alignment','markdown', 'emoji'
+    'title', 'bold', 'italic', 'underline', 'fontScale', 'color', 'ol', 'ul',
+    'blockquote', 'code', 'table', 'link', 'hr', 'indent', 'outdent',
+    'alignment','emoji','fullscreen', 'markdown',#'image',
 ]
+
 
 SIMDITOR_CONFIGS = {
     'toolbar': SIMDITOR_TOOLBAR,
+    'upload': {
+        'url': '/simditor/upload/',
+        'fileKey': 'upload',
+        'image_size': 1024 * 1024 * 4 # max image size 4MB
+    },
     'emoji': {
         'imagePath': '/static/simditor/images/emoji/'
     }
 }
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -198,31 +206,31 @@ AUTHENTICATION_BACKENDS = (
 
 
 
-# server  { 
-#     listen 80; 
-#     server_name 47.100.79.33 0.0.0.0; 
-    
+# server  {
+#     listen 80;
+#     server_name 47.100.79.33 0.0.0.0;
+
 #     location = /favicon.ico { access_log off; log_not_found off; }
-    
-#     location /static/ { root /home/hdx/sites/471007933.com/hdxsite; } 
-    
-#     location / { 
+
+#     location /static/ { root /home/hdx/sites/471007933.com/hdxsite; }
+
+#     location / {
 #         proxy_set_header Host $http_host;
-#         proxy_set_header X-Real-IP $remote_addr; 
-#         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
-#         proxy_set_header X-Forwarded-Proto $scheme; 
-#         proxy_pass http://unix:/home/hdx/sites/471007933.com/hdxsite/hdxsite.sock; } 
+#         proxy_set_header X-Real-IP $remote_addr;
+#         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#         proxy_set_header X-Forwarded-Proto $scheme;
+#         proxy_pass http://unix:/home/hdx/sites/471007933.com/hdxsite/hdxsite.sock; }
 #     }
 
-# [Unit] 
-# Description=gunicorn daemon 
-# After=network.target 
+# [Unit]
+# Description=gunicorn daemon
+# After=network.target
 
-# [Service] 
-# User=root 
-# Group=nginx 
-# WorkingDirectory=/home/hdx/sites/471007933.com/hdxsite 
-# ExecStart=/home/hdx/sites/471007933.com/hdxsite_env/bin/gunicorn --workers 3 --bind unix:/home/hdx/sites/471007933.com/hdxsite/hdxsite.sock hdxsite.wsgi:application 
+# [Service]
+# User=root
+# Group=nginx
+# WorkingDirectory=/home/hdx/sites/471007933.com/hdxsite
+# ExecStart=/home/hdx/sites/471007933.com/hdxsite_env/bin/gunicorn --workers 3 --bind unix:/home/hdx/sites/471007933.com/hdxsite/hdxsite.sock hdxsite.wsgi:application
 
 
 # [Install] WantedBy=multi-user.target

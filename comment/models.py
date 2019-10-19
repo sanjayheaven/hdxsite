@@ -20,7 +20,7 @@ class BaseComment(models.Model):
 class Comment(BaseComment):
     '''
     '''
-    content = RichTextField(verbose_name='评论正文', max_length=1024)
+    content = RichTextField(verbose_name='评论正文')
     post = models.ForeignKey(Post,on_delete=models.CASCADE,related_name='comments',verbose_name='文章')#related_name反向查询
 
     def __str__(self):
@@ -34,7 +34,7 @@ class Comment(BaseComment):
 class CommentReply(BaseComment):
     '''
     '''
-    reply_content = RichTextField(verbose_name='正文',max_length=1024)
+    reply_content = RichTextField(verbose_name='正文')
     reply_comment = models.ForeignKey(Comment,on_delete=models.CASCADE,related_name='replies',blank=True,verbose_name='评论回复')
     reply = models.ForeignKey('self',null=True,blank=True,on_delete=models.CASCADE, verbose_name='回复对象')
 

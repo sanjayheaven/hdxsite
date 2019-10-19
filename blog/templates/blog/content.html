@@ -23,7 +23,11 @@
         </div>
         {% endif %} -->
         <div class="col-9 card-body">
-            <h4 class="card-title"><a class="btn btn-outline-primary hvr-forward" style="color:rgb(0, 0, 0);" href="{% url 'blog:post-detail' post.id %}">{{ post.title }}</a></h4>
+            <h4 class="card-title ">
+                <a class="btn btn-outline-primary hvr-forward" style="color:rgb(0, 0, 0);" href="{% url 'blog:post-detail' post.id %}">
+                    {{ post.title }}
+                </a>
+            </h4>
                 {% if 1 %}
                 <a href="{% url 'blog:category-list' post.category.id %}" class="btn btn-sm hvr-pop btn-outline-info">
                     {{ post.category }}

@@ -29,12 +29,10 @@ class AddPostModelForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = '__all__'
-        exclude = ['total_views', 'update_time', 'status']
+        exclude = ['total_views', 'update_time']
         widgets = {
-            'title':
-            forms.TextInput(attrs={'class': 'form-control'}),
-            'abstract':
-            forms.TextInput(attrs={
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'abstract': forms.TextInput(attrs={
                 'class': 'form-control',
             }),
             # 'content':
@@ -42,8 +40,7 @@ class AddPostModelForm(forms.ModelForm):
             #     'class': 'form-control',
             #     'placeholder': '请使用markdown语法编辑文章'
             # }),
-            'category':
-            forms.Select(attrs={'class': 'form-control'}),
-            'tag':
-            forms.SelectMultiple(attrs={'class': 'form-control'}),
+            'category': forms.Select(attrs={'class': 'form-control'}),
+            'status': forms.Select(attrs={'class': 'form-control'}),
+            'tag': forms.SelectMultiple(attrs={'class': 'form-control'}),
         }

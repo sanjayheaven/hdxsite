@@ -31,7 +31,7 @@ sitemaps = {
 
 urlpatterns = [
     # path('',),####    参考链接默认值？？？
-    path('blog/', include('blog.urls'),name='blog'),
+    path('', include('blog.urls'),name='blog'),
     path('comment/', include('comment.urls'),name='comment'),
     path('tool/', include('tool.urls'),name='tool'),
     path('accounts/', include('allauth.urls'),name='allauth'),
